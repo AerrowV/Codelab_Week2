@@ -1,5 +1,8 @@
 package dat.config;
 
+import dat.entities.Course;
+import dat.entities.Person;
+import dat.entities.Student;
 import dat.utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
@@ -30,7 +33,7 @@ public class HibernateConfig {
     }
 
     public static EntityManagerFactory getEntityManagerFactoryForTest() {
-        if (emfTest == null){
+        if (emfTest == null) {
             setTest(true);
             emfTest = createEMF(getTest());  // No DB needed for test
         }
@@ -39,7 +42,9 @@ public class HibernateConfig {
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
-        //     configuration.addAnnotatedClass(Entity.class);
+        configuration.addAnnotatedClass(Person.class);
+        configuration.addAnnotatedClass(Course.class);
+        configuration.addAnnotatedClass(Student.class);
 
     }
 
@@ -65,8 +70,7 @@ public class HibernateConfig {
             SessionFactory sf = configuration.buildSessionFactory(serviceRegistry);
             EntityManagerFactory emf = sf.unwrap(EntityManagerFactory.class);
             return emf;
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
